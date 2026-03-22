@@ -1,13 +1,11 @@
-import React from "react";
+import React from 'react';
 
 function App() {
- 
-
   return (
-    <>
-    <h1 className="text-2xl text-red-600 text-center mt-52 font-bold">Test</h1>
-    </>
+    <div>
+      <h1 className='text-gray-600'>Riff</h1>
+    </div>
   );
 }
-
+    
 export default App;
