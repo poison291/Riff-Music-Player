@@ -1,9 +1,11 @@
 import React from 'react';
 
+import NoMusicFound from './Components/Analyze';
+
 function App() {
   return (
-    <div>
-      <h1 className='text-gray-600'>Riff</h1>
+    <div className='bg-[#0F0F12] min-h-screen'>
+      <NoMusicFound/>
     </div>
   );
 }

@@ -5,25 +5,30 @@ import (
 	"os"
 )
 
-func main(){
-	DirName := "C:\\Users\\susan\\Music"
-	
+func getMusicPath() string {
+	home, _ := os.UserHomeDir()
+	return home + "\\Music"
+}
+
+
+func main() {
+	DirName := getMusicPath()
+
 	files, err := os.ReadDir(DirName)
-	
-	if err != nil{
+
+	if err != nil {
 		fmt.Println("Error in Reading Music Directory")
 	}
-	
-	for i, file := range files{
-		if file.IsDir(){
+
+	for i, file := range files {
+		if file.IsDir() {
 			fmt.Printf("Directory %s \n", file.Name())
-		}else {
-			info, _ := file.Info()  
-			fmt.Printf("%d File: %s Size: %d Kilobytes \n",i+1, file.Name(), info.Size()/1024)
-			
+		} else {
+			info, _ := file.Info()
+			fmt.Printf("%d File: %s Size: %d Kilobytes \n", i+1, file.Name(), info.Size()/1024)
+
 		}
 	}
+	fmt.Println(DirName)
 
-	
-	
 }
