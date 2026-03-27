@@ -32,7 +32,7 @@ function Sidebar() {
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
-            className="flex items-center gap-3 px-3 py-2 rounded-md font-mono text-xs tracking-[0.08em] uppercase transition-colors duration-150 text-left hover:bg-white/5"
+            className="flex items-center gap-3 px-3 py-2 rounded-md font-mono text-xs tracking-[0.08em] uppercase transition-colors duration-150 text-left hover:bg-white/5 "
             style={{
               color: activeTab === item.id ? theme.accent : "#666",
               backgroundColor:

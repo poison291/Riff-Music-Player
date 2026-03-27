@@ -3,6 +3,7 @@ import React from 'react';
 import NoMusicFound from './Components/Analyze';
 import Sidebar from './Components/Sidebar';
 import Navbar from './Components/Navbar';
+import Songs from './Components/Songs';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Sidebar />
       <div className='flex flex-col flex-1'>
         <Navbar />
-        
+        <Songs/>
       </div>
     </div>
   );
