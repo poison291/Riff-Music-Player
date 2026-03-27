@@ -1,7 +1,7 @@
 # Riff
 
 <p align="center">
-  <img src="client/icon.png" alt="Riff Logo" width="140"/>
+  <img src="client/public/icon.png" alt="Riff Logo" width="140"/>
 </p>
 
 <p align="center">
