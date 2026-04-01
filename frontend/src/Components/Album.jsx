@@ -4,14 +4,13 @@ import { GetSongs } from "../../wailsjs/go/main/App";
 import { useStore } from "../helper/useStore";
 import {ScaleLoader} from "react-spinners" 
 
-function Songs() {
+function Albums() {
   const activeTab = useStore((state) => state.activeTab);
-  const currentSong = useStore((state) => state.currentSong)
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
 
 
-  if (activeTab !== "library") return null;
+  if (activeTab !== "albums") return null;
   
   useEffect(() => {
     setLoading(true);
@@ -44,8 +43,7 @@ function Songs() {
     
           {/* Song Rows */}
           {songs.map((song, i) => (
-            <div key={song.id}
-              className="flex items-center px-4 py-3  hover:bg-white/4 cursor-pointer">
+            <div key={song.id} className="flex items-center px-4 py-3  hover:bg-white/4 cursor-pointer">
               <span className="w-10 text-xs text-[#444]">{i + 1}</span>
               <img className="w-8 h-9 rounded mr-3 object-cover bg-[#1a1a1a]" src={song.image || ""} alt={song.title} />
               <div className="flex-1 flex flex-col overflow-hidden">
@@ -60,4 +58,4 @@ function Songs() {
   );
 }
 
-export default Songs;
+export default Albums;

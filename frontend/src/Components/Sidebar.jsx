@@ -20,7 +20,7 @@ function Sidebar() {
   return (
     <div className="bg-[#121212] flex flex-col w-64 h-screen p-2 select-none overflow-hidden">
  
-      <div className="flex items-center gap-2 mb-7 mt-3">
+      <div className="flex items-center gap-2 mb-3 mt-3">
         <img
           src="./icon.png"
           className="w-10 object-contain "
