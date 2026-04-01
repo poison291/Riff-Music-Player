@@ -1,19 +1,32 @@
-# README
+# ⚠️ Riff Music Player
 
-## About
+Riff Music Player is a fast, modern, and aesthetic local music player designed to deliver a smooth and immersive listening experience. It focuses on clean UI, performance, and a visually appealing interface for managing and playing your local music collection.
 
-This is the official Wails React template.
+This project is fully owned and developed by **Venom Dev**.  
+All rights, source code, design, and related assets are exclusively reserved.
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+This is **not the first version** of the project. It is an ongoing and evolving system with continuous improvements and internal iterations.
 
-## Live Development
+---
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+## Features
 
-## Building
+- Fast and responsive local music playback  
+- Automatic scanning of local music files  
+- Rich metadata support (title, artist, album)  
+- Aesthetic and modern UI design  
+- High-performance and smooth interactions  
+- Active song highlighting and intuitive selection  
+- Clean, responsive, and fluid interface  
 
-To build a redistributable, production mode package, use `wails build`.
+---
+
+## Ownership Notice
+
+- All intellectual property belongs to **Venom Dev**  
+- No permission is granted to copy, redistribute, or modify any part of this project  
+- Unauthorized use is strictly prohibited  
+
+---
+
+© Venom Dev. All rights reserved.
