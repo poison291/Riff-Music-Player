@@ -5,8 +5,6 @@ export default function NoMusicFound() {
   const [machineName, setMachineName] = useState("...");
   const [homeDir, setHomeDir] = useState("~");
 
-  invoke('get_machine_name').then(setMachineName).catch(() => setMachineName("Unknown"));
-  invoke('get_home_dir').then(setHomeDir).catch(() => setHomeDir("~"));
 
   const onReScan = () => {
     alert("Rescaning the folder");
