@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { defaultTheme, themes } from "../helper/theme";
+import { useStore } from "../helper/useStore";
 import Navbar from "./Navbar";
 
 function Sidebar() {
   const [themeName, setThemename] = useState(defaultTheme);
-  const [activeTab, setActiveTab] = useState("library");
   const theme = themes[themeName];
+  
+  const activeTab = useStore((state) => state.activeTab);
+    const setActiveTab = useStore((state) => state.setActiveTab);
 
   const navItem = [
     { id: "library", icon: "▤", label: "Library" },
@@ -16,14 +19,14 @@ function Sidebar() {
 
   return (
     <div className="bg-[#121212] flex flex-col w-64 h-screen p-2 select-none overflow-hidden">
-      {/* Riff Heading*/}
+ 
       <div className="flex items-center gap-2 mb-7 mt-3">
         <img
           src="./icon.png"
           className="w-10 object-contain "
           alt="riff logo"
         />
-        <h1 className="text-white text-md font-bold font-sans ">RIFF</h1>
+        <h1 className="text-white text-md font-bold font-mono ">RIFF</h1>
       </div>
       <hr className="text-[#222222] -m-2" />
 
@@ -44,7 +47,6 @@ function Sidebar() {
           </button>
         ))}
       </div>
-
     </div>
   );
 }
