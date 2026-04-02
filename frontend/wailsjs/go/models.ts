@@ -9,6 +9,7 @@ export namespace main {
 	    ext: string;
 	    image: string;
 	    duration: number;
+	    streamUrl: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Song(source);
@@ -24,6 +25,7 @@ export namespace main {
 	        this.ext = source["ext"];
 	        this.image = source["image"];
 	        this.duration = source["duration"];
+	        this.streamUrl = source["streamUrl"];
 	    }
 	}
 

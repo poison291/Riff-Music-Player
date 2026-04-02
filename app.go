@@ -1,13 +1,18 @@
 package main
+
 import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
+
 	"github.com/dhowden/tag"
 )
+
 // App struct
 type App struct {
 	ctx context.Context
@@ -21,19 +26,25 @@ type Song struct {
 	Ext      string `json:"ext"`
 	Image    string `json:"image"`
 	Duration int    `json:"duration"`
+	StreamURL string `json:"streamUrl"`
 }
-// NewApp creates a new App application struct
+
+
 func NewApp() *App {
 	return &App{}
 }
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
+
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	home, _ := os.UserHomeDir()
+	musicDir  := filepath.Join(home, "music")
+	fs := http.FileServer(http.Dir(musicDir))
+	go http.ListenAndServe(":9876", fs)
 }
 func (a *App) GetSongs() []Song {
 	home, _ := os.UserHomeDir()
 	dirName := filepath.Join(home, "music")
+
 	files, err := os.ReadDir(dirName)
 	if err != nil {
 		fmt.Println("Error reading music directory")
@@ -71,14 +82,16 @@ func (a *App) GetSongs() []Song {
 					image = "data:" + pic.MIMEType + ";base64," + encoded
 				}
 			}
+
 			songs = append(songs, Song{
-				ID:     sn,
-				Title:  title,
-				Path:   fullPath,
-				Album:  album,
-				Artist: artist,
-				Ext:    ext,
-				Image:  image,
+				ID:        sn,
+				Title:     title,
+				Path:      fullPath,
+				Album:     album,
+				Artist:    artist,
+				Ext:       ext,
+				Image:     image,
+				StreamURL: "http://localhost:9876/" + url.PathEscape(file.Name()),
 			})
 			sn++
 		}

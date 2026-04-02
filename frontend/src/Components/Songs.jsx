@@ -6,10 +6,11 @@ import {ScaleLoader} from "react-spinners"
 
 function Songs() {
   const activeTab = useStore((state) => state.activeTab);
-  const currentSong = useStore((state) => state.currentSong)
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const currentSong = useStore((state) => state.currentSong)
+  const setCurrentSong = useStore((state) => state.setCurrentSong);
 
   if (activeTab !== "library") return null;
   
@@ -45,6 +46,7 @@ function Songs() {
           {/* Song Rows */}
           {songs.map((song, i) => (
             <div key={song.id}
+              onClick={() => setCurrentSong(song)}
               className="flex items-center px-4 py-3  hover:bg-white/4 cursor-pointer">
               <span className="w-10 text-xs text-[#444]">{i + 1}</span>
               <img className="w-8 h-9 rounded mr-3 object-cover bg-[#1a1a1a]" src={song.image || ""} alt={song.title} />
