@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export const useStore = create((set) => ({
-  activeTab: 'library',
+  activeTab: 'home',
   setActiveTab: (tab) => set({ activeTab: tab }),
   currentSong: null,
   setCurrentSong: (song) => set({ currentSong: song }),

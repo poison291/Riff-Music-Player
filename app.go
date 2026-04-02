@@ -9,26 +9,27 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/dhowden/tag"
+	"github.com/hugolgst/rich-go/client"
 )
 
-// App struct
 type App struct {
 	ctx context.Context
 }
+
 type Song struct {
-	ID       int    `json:"id"`
-	Title    string `json:"title"`
-	Artist   string `json:"artist"`
-	Album    string `json:"album"`
-	Path     string `json:"path"`
-	Ext      string `json:"ext"`
-	Image    string `json:"image"`
-	Duration int    `json:"duration"`
+	ID        int    `json:"id"`
+	Title     string `json:"title"`
+	Artist    string `json:"artist"`
+	Album     string `json:"album"`
+	Path      string `json:"path"`
+	Ext       string `json:"ext"`
+	Image     string `json:"image"`
+	Duration  int    `json:"duration"`
 	StreamURL string `json:"streamUrl"`
 }
-
 
 func NewApp() *App {
 	return &App{}
@@ -36,11 +37,69 @@ func NewApp() *App {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+
 	home, _ := os.UserHomeDir()
-	musicDir  := filepath.Join(home, "music")
+	musicDir := filepath.Join(home, "music")
 	fs := http.FileServer(http.Dir(musicDir))
 	go http.ListenAndServe(":9876", fs)
+
+	err := client.Login("1488909991254556794")
+	if err != nil {
+		fmt.Println("Discord RPC not connected:", err)
+	}
 }
+
+func (a *App) connectDiscord() {
+	for {
+		err := client.Login("1488909991254556794")
+		if err == nil {
+			fmt.Println("Discord RPC connected!")
+			return
+		}
+		fmt.Println("Discord not running, retrying in 15s...")
+		time.Sleep(5 * time.Second)
+	}
+}
+
+func (a *App) UpdatePresence(title string, artist string) {
+	if artist == "" {
+		artist = "Unknown Artist"
+	}
+
+	err := client.SetActivity(client.Activity{
+		Details: title,
+		State:   "by " + artist,
+
+		LargeImage: "music_icon",
+		LargeText:  "Playing " + title,
+
+		SmallImage: "riff_logo",
+		SmallText:  "RIFF",
+	})
+	if err != nil {
+		fmt.Println("Presence failed, reconnecting...")
+		client.Logout()
+		reconnErr := client.Login("1488909991254556794")
+		if reconnErr == nil {
+			client.SetActivity(client.Activity{
+				Details:  title,
+				State:   "by " + artist,
+
+				LargeImage: "music_icon",
+				LargeText:  "Playing " + title,
+
+				SmallImage: "riff_logo",
+				SmallText:  "RIFF",
+
+			})
+		}
+	}
+}
+
+func (a *App) ClearPresence() {
+	client.Logout()
+}
+
 func (a *App) GetSongs() []Song {
 	home, _ := os.UserHomeDir()
 	dirName := filepath.Join(home, "music")
@@ -50,6 +109,7 @@ func (a *App) GetSongs() []Song {
 		fmt.Println("Error reading music directory")
 		return nil
 	}
+
 	var songs []Song
 	sn := 1
 	for _, file := range files {
@@ -65,6 +125,7 @@ func (a *App) GetSongs() []Song {
 			}
 			meta, err := tag.ReadFrom(f)
 			f.Close()
+
 			title := file.Name()
 			artist := ""
 			album := ""
@@ -75,6 +136,7 @@ func (a *App) GetSongs() []Song {
 				artist = meta.Artist()
 				album = meta.Album()
 			}
+
 			image := ""
 			if meta != nil {
 				if pic := meta.Picture(); pic != nil {

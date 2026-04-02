@@ -36,4 +36,4 @@ export const themes = {
   },
 };
 
-export const defaultTheme = "red";
+export const defaultTheme = "green";

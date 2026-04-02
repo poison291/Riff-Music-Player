@@ -11,6 +11,7 @@ function Sidebar() {
     const setActiveTab = useStore((state) => state.setActiveTab);
 
   const navItem = [
+    { id: "home", icon: "🏠︎", label: "Home" },
     { id: "library", icon: "▤", label: "Library" },
     { id: "albums", icon: "◫", label: "Albums" },
     { id: "artists", icon: "◎", label: "Artists" },

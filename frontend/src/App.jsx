@@ -5,6 +5,7 @@ import Songs from './Components/Songs';
 import { useStore } from "./helper/useStore";
 import Albums from './Components/Album';
 import Player from './Components/Player';
+import Home from './Components/Home';
 
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
   
   const renderContent = () => {
       switch (activeTab) {
+        case "home":
+          return <Home />;
         case "library":
           return <Songs />;
         case "albums":

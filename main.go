@@ -28,6 +28,7 @@ func main() {
 		Bind: []interface{}{
 			app,
 		},
+		
 	})
 
 	if err != nil {

@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useStore } from "../helper/useStore";
-import { useEffect, useRef } from "react";
+import { UpdatePresence } from "../../wailsjs/go/main/App";
 
 export default function Player() {
   const currentSong = useStore((state) => state.currentSong);
+  const audioRef = useRef(null);
 
-  if (!currentSong) {
-    return null;
-  }
+  useEffect(() => {
+    if (currentSong) {
+      UpdatePresence(currentSong.title, currentSong.artist || "");
+    }
+  }, [currentSong]);
+
+  if (!currentSong) return null;
+
   return (
     <div>
       <div className="text-white py-4 px-3 bg-[#0F0F12] font-semibold flex">
@@ -18,16 +24,11 @@ export default function Player() {
         />
         <div className="flex-1 mt-3 ml-3 justify-center">
           <p className="text-sm">{currentSong.title}</p>
-
-          <p className="text-xs text-gray-400 font-normal">
-            {currentSong.artist}
-          </p>
+          <p className="text-sm">{currentSong.Duration}</p>
+          <p className="text-xs text-gray-400 font-normal">{currentSong.artist}</p>
         </div>
-
         <div>
-          <audio
-          src={currentSong.streamUrl}
-           autoPlay controls />
+          <audio ref={audioRef} src={currentSong.streamUrl} autoPlay controls />
         </div>
       </div>
     </div>
