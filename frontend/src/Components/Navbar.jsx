@@ -4,7 +4,7 @@ import { WindowMinimise, WindowToggleMaximise, Quit } from "../../wailsjs/runtim
 function Navbar() {
   return (
     <div
-      className="flex items-center justify-between px-4 h-16 bg-[#0F0F12] select-none border-b border-[#1f1f1f]"
+      className="flex items-center justify-between px-4 h-16 bg-[#0F0F12] select-none "
       style={{ "--wails-draggable": "drag" }}
     >
       {/* Left — Search */}
@@ -12,7 +12,7 @@ function Navbar() {
         <div className="relative">
           <input
             placeholder="Search tracks, artists..."
-            className="text-xs rounded-md px-3 py-2 pl-8 outline-none w-64 bg-[#1a1a1a] text-[#ccc] border border-[#2a2a2a] focus:border-gray-500 transition"
+            className="text-xs rounded-md px-3 mt-2 py-3 pl-8 outline-none w-64 bg-[#1a1a1a] text-[#ccc] border border-[#2a2a2a] focus:border-gray-500 transition"
           />
           <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-[#555]">
             ⌕

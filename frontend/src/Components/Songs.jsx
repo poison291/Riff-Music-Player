@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { GetSongs } from "../../wailsjs/go/main/App";
 import { useStore } from "../helper/useStore";
-import {ScaleLoader} from "react-spinners" 
+import { ScaleLoader } from "react-spinners" 
+import { themes, defaultTheme } from "../helper/theme";
 
 function Songs() {
   const activeTab = useStore((state) => state.activeTab);
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [themeName, setThemename] = useState(defaultTheme);
+  const theme = themes[themeName];
   const currentSong = useStore((state) => state.currentSong)
   const setCurrentSong = useStore((state) => state.setCurrentSong);
 
@@ -27,14 +29,14 @@ function Songs() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <ScaleLoader width={5}  margin={5} speedMultiplier={0.7}  height={64} color="white"/>
+        <ScaleLoader width={5} margin={5} speedMultiplier={0.7} height={64} color="#34D399" />
       </div>
     )
   }
 
   return (
 
-        <div className="h-full overflow-y-scroll no-scrollbar bg-[#0F0F12] text-white font-mono px-2 select-none">
+        <div className="h-full overflow-y-scroll no-scrollbar bg-[#0F0F12] text-white  px-2 select-none">
         
           <div className="sticky top-0 z-10 flex items-center px-6 py-2 text-xs text-[#444]  bg-[#0F0F12] border-b border-[#1a1a1a]">
             <span className="w-8 ">#</span>

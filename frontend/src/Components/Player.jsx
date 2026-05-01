@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useStore } from "../helper/useStore";
 import { UpdatePresence } from "../../wailsjs/go/main/App";
+import { AudioPlayer } from "react-audio-player-component";
 
 export default function Player() {
   const currentSong = useStore((state) => state.currentSong);
@@ -25,7 +26,9 @@ export default function Player() {
         <div className="flex-1 mt-3 ml-3 justify-center">
           <p className="text-sm">{currentSong.title}</p>
           <p className="text-sm">{currentSong.Duration}</p>
-          <p className="text-xs text-gray-400 font-normal">{currentSong.artist}</p>
+          <p className="text-xs text-gray-400 font-normal">
+            {currentSong.artist}
+          </p>
         </div>
         <div>
           <audio ref={audioRef} src={currentSong.streamUrl} autoPlay controls />

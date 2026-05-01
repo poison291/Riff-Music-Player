@@ -10,6 +10,7 @@ export namespace main {
 	    image: string;
 	    duration: number;
 	    streamUrl: string;
+	    bundled: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new Song(source);
@@ -26,6 +27,7 @@ export namespace main {
 	        this.image = source["image"];
 	        this.duration = source["duration"];
 	        this.streamUrl = source["streamUrl"];
+	        this.bundled = source["bundled"];
 	    }
 	}
 
