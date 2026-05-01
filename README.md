@@ -34,7 +34,7 @@ This is **not the first version** of the project. It is an ongoing and evolving 
 
 Unauthorized use of this software will result in immediate execution — and no, we don't mean running the program.
 
-Violators will be hunted down by our elite team of developers (just me, at 2am), tried in a court of rubber ducks, and sentenced to debugging CSS on Internet Explorer for eternity.
+Violators will be hunted down by our elite team of developers
 
 You have been warned. 
 
