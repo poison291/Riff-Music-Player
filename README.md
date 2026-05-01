@@ -1,3 +1,8 @@
+<div align="center">
+
+<img src="./assets/icon.png" width="140" alt="Riff Music Player Logo"/>
+</div>
+
 # Riff Music Player (Development State)
 
 Riff Music Player is a fast, modern, and aesthetic local music player designed to deliver a smooth and immersive listening experience. It focuses on clean UI, performance, and a visually appealing interface for managing and playing your local music collection.
@@ -41,3 +46,5 @@ You have been warned.
 ---
 
 © Venom Dev. All rights reserved. (We're watching. Always. 👁️)
+
+
