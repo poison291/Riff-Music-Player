@@ -1,6 +1,6 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "riff",
+  "name": "Riff",
   "outputfilename": "riff",
   "icon": "frontend/assets/icon.png",
   "frontend:install": "npm install",

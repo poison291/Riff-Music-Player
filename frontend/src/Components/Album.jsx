@@ -19,7 +19,6 @@ function Albums() {
     setLoading(true);
     GetSongs()
       .then((result) => {
-        // grouped lives HERE where result exists
         const grouped = (result || []).reduce((acc, song) => {
           const key = song.album || "Unknown Album";
           if (!acc[key]) {

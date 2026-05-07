@@ -16,21 +16,24 @@ import (
 	"github.com/hugolgst/rich-go/client"
 )
 
-//go:embed assets/music/* 
+//go:embed assets/music/*
 var bundledMusic embed.FS
 
+// auto-generated bundled song map
+var bundledNames = make(map[string]bool)
 
-var bundledNames = map[string]bool{
-	"3. Borderline.mp3":                true,
-	"4. Let It Happen.mp3":             true,
-	"5. WILDFLOWER.mp3":                true,
-	"19. Line Without a Hook.mp3":      true,
-	"27. Deslocado.mp3":                true,
-	"80. Starman - 2012 Remaster.mp3":  true,
-	"90. Creep.mp3":                    true,
-	"93. Exit Music (For A Film).mp3":  true,
-	"94. I Wonder.mp3":                 true,
-	"100. Summertime Sadness.mp3":      true,
+func init() {
+	files, err := bundledMusic.ReadDir("assets/music")
+	if err != nil {
+		fmt.Println("Failed reading embedded music:", err)
+		return
+	}
+
+	for _, f := range files {
+		if !f.IsDir() {
+			bundledNames[f.Name()] = true
+		}
+	}
 }
 
 type App struct{ ctx context.Context }
@@ -93,13 +96,23 @@ func (a *App) UpdatePresence(title, artist string) {
 		artist = "Unknown Artist"
 	}
 	activity := client.Activity{
+
 		Details:    title,
 		State:      "by " + artist,
 		LargeImage: "music_icon",
 		LargeText:  "Listening to " + title,
 		SmallImage: "riff_logo",
 		SmallText:  "RIFF",
-		Buttons:    []*client.Button{{Label: "Get RIFF", Url: "https://github.com/poison291/Riff-Music-Player"}},
+		Buttons: []*client.Button{
+			{
+				Label: "Download RIFF",
+				Url:   "https://github.com/poison291/Riff-Music-Player",
+			},
+			{
+				Label: "Join the Community",
+				Url:   "https://discord.gg/uA4et7xtG4",
+			},
+		},
 	}
 	if err := client.SetActivity(activity); err != nil {
 		client.Logout()
@@ -109,7 +122,9 @@ func (a *App) UpdatePresence(title, artist string) {
 	}
 }
 
-func (a *App) ClearPresence() { client.Logout() }
+func (a *App) ClearPresence() {
+	client.SetActivity(client.Activity{})
+}
 
 func (a *App) GetSongs() []Song {
 	home, _ := os.UserHomeDir()
@@ -119,19 +134,27 @@ func (a *App) GetSongs() []Song {
 	}
 	var songs []Song
 	for i, file := range files {
-		if file.IsDir() { continue }
+		if file.IsDir() {
+			continue
+		}
 		ext := strings.ToLower(filepath.Ext(file.Name()))
-		if ext != ".mp3" && ext != ".wav" && ext != ".flac" { continue }
+		if ext != ".mp3" && ext != ".wav" && ext != ".flac" {
+			continue
+		}
 
 		fullPath := filepath.Join(home, "music", file.Name())
 		f, err := os.Open(fullPath)
-		if err != nil { continue }
+		if err != nil {
+			continue
+		}
 		meta, _ := tag.ReadFrom(f)
 		f.Close()
 
 		title, artist, album, image := file.Name(), "", "", ""
 		if meta != nil {
-			if meta.Title() != "" { title = meta.Title() }
+			if meta.Title() != "" {
+				title = meta.Title()
+			}
 			artist, album = meta.Artist(), meta.Album()
 			if pic := meta.Picture(); pic != nil {
 				image = "data:" + pic.MIMEType + ";base64," + base64.StdEncoding.EncodeToString(pic.Data)

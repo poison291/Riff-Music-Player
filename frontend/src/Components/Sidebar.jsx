@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { defaultTheme, themes } from "../helper/theme";
 import { useStore } from "../helper/useStore";
 import {
-  House,
+    AudioLines,
   Library,
   LucideDisc,
   LucideDownload,
@@ -18,7 +18,7 @@ function Sidebar() {
   const setActiveTab = useStore((state) => state.setActiveTab);
 
   const navItem = [
-    { id: "home", icon: <House size={18} />, label: "Home" },
+    { id: "home", icon: <AudioLines size={18} />, label: "Explore" },
     { id: "library", icon: <Library size={18} />, label: "Library" },
     { id: "albums", icon: <LucideDisc size={18} />, label: "Albums" },
     { id: "artists", icon: <LucideUsers size={18} />, label: "Artists" },

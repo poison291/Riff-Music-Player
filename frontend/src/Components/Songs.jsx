@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { GetSongs } from "../../wailsjs/go/main/App";
 import { useStore } from "../helper/useStore";
-import { ScaleLoader } from "react-spinners" 
+import { ScaleLoader } from "react-spinners";
 import { themes, defaultTheme } from "../helper/theme";
 
 function Songs() {
@@ -11,56 +11,71 @@ function Songs() {
   const [loading, setLoading] = useState(true);
   const [themeName, setThemename] = useState(defaultTheme);
   const theme = themes[themeName];
-  const currentSong = useStore((state) => state.currentSong)
+  const currentSong = useStore((state) => state.currentSong);
   const setCurrentSong = useStore((state) => state.setCurrentSong);
 
   if (activeTab !== "library") return null;
-  
+
   useEffect(() => {
     setLoading(true);
-    GetSongs().then((result) => {
-      setSongs(result || []);
-    })
+    GetSongs()
+      .then((result) => {
+        setSongs(result || []);
+      })
       .finally(() => {
         setLoading(false);
       });
   }, []);
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <ScaleLoader width={5} margin={5} speedMultiplier={0.7} height={64} color="#34D399" />
+        <ScaleLoader
+          width={5}
+          margin={5}
+          speedMultiplier={0.7}
+          height={64}
+          color="#34D399"
+        />
       </div>
-    )
+    );
   }
 
   return (
+    <div className="h-full overflow-y-scroll no-scrollbar bg-[#0F0F12] text-white  px-2 select-none">
+      <div className="sticky top-0 z-10 flex items-center px-6 py-2 text-xs text-[#444]  bg-[#0F0F12] border-b border-[#1a1a1a]">
+        <span className="w-8 ">#</span>
+        <span className="flex-1 ml-2">TITLE</span>
+        <span className="w-48 hidden md:block">ALBUM</span>
+        <span className="w-20 text-right">DURATION</span>
+      </div>
 
-        <div className="h-full overflow-y-scroll no-scrollbar bg-[#0F0F12] text-white  px-2 select-none">
-        
-          <div className="sticky top-0 z-10 flex items-center px-6 py-2 text-xs text-[#444]  bg-[#0F0F12] border-b border-[#1a1a1a]">
-            <span className="w-8 ">#</span>
-            <span className="flex-1 ml-2">TITLE</span>
-            <span className="w-48 hidden md:block">ALBUM</span>
-            <span className="w-20 text-right">DURATION</span>
+      {/* Song Rows */}
+      {songs.map((song, i) => (
+        <div
+          key={song.id}
+          onClick={() => setCurrentSong(song)}
+          className="flex items-center px-4 py-3  hover:bg-white/4 cursor-pointer"
+        >
+          <span className="w-10 text-xs text-[#444]">{i + 1}</span>
+          <img
+            className="w-8 h-9 rounded mr-3 object-cover bg-[#1a1a1a]"
+            src={song.image || ""}
+            alt={song.title}
+          />
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <span className="text-sm text-[#ccc] truncate group-hover:text-white">
+              {song.title}
+            </span>
+            <span className="text-xs text-[#555] truncate">{song.artist}</span>
           </div>
-    
-          {/* Song Rows */}
-          {songs.map((song, i) => (
-            <div key={song.id}
-              onClick={() => setCurrentSong(song)}
-              className="flex items-center px-4 py-3  hover:bg-white/4 cursor-pointer">
-              <span className="w-10 text-xs text-[#444]">{i + 1}</span>
-              <img className="w-8 h-9 rounded mr-3 object-cover bg-[#1a1a1a]" src={song.image || ""} alt={song.title} />
-              <div className="flex-1 flex flex-col overflow-hidden">
-                <span className="text-sm text-[#ccc] truncate group-hover:text-white">{song.title}</span>
-                <span className="text-xs text-[#555] truncate">{song.artist}</span>
-              </div>
-              <span className="w-54 text-xs text-[#555] truncate hidden md:block">{song.album || "—"}</span>
-              <span className="w-16 text-xs text-[#555] text-right"></span>
-            </div>
-          ))}
+          <span className="w-54 text-xs text-[#555] truncate hidden md:block">
+            {song.album || "—"}
+          </span>
+          <span className="w-16 text-xs text-[#555] text-right"></span>
         </div>
+      ))}
+    </div>
   );
 }
 

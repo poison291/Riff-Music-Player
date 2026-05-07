@@ -1,35 +1,55 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { GetSongs } from "../../wailsjs/go/main/App";
 import { ScaleLoader } from "react-spinners";
 import { useStore } from "../helper/useStore";
 import Recommended from "../SubComp/Recommended";
 import { defaultTheme, themes } from "../helper/theme";
 
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
 function Home() {
+  const currentSong = useStore((s) => s.currentSong);
+  const setCurrentSong = useStore((s) => s.setCurrentSong);
+
+  const theme = themes[defaultTheme];
+
   const [loading, setLoading] = useState(true);
-  const [songs, setSongs] = useState([]);
-  const [themeName, setThemename] = useState(defaultTheme);
-  const theme = themes[themeName];
   const [featured, setFeatured] = useState([]);
   const [recommended, setRecommended] = useState([]);
-  
-  const currentSong = useStore((state) => state.currentSong)
-  const setCurrentSong = useStore((state) => state.setCurrentSong);
 
   useEffect(() => {
-      setLoading(true);
-      GetSongs()
-          .then((result) => {
-              const bundled = result.filter(s => s.bundled);
-              const userSongs = result.filter(s => !s.bundled);
-              const shuffledUser = [...userSongs].sort(() => Math.random() - 0.5);
-  
-              setFeatured([bundled[8], bundled[0]].filter(Boolean));
-              setRecommended([...bundled.slice(2), ...shuffledUser]);
-          })
-          .finally(() => setLoading(false));
+    let alive = true;
+
+    (async () => {
+      try {
+        const result = await GetSongs();
+        if (!alive) return;
+
+        const bundled = result?.filter((s) => s.bundled) || [];
+        const user = result?.filter((s) => !s.bundled) || [];
+
+        const shuffledUser = shuffle(user);
+
+        setFeatured(
+          [bundled?.[0], bundled?.[1]].filter(Boolean)
+        );
+
+        setRecommended([...bundled.slice(2), ...shuffledUser]);
+      } catch (e) {
+        console.error("Failed to load songs", e);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
   }, []);
+
+  const featuredList = useMemo(() => featured, [featured]);
 
   if (loading) {
     return (
@@ -46,34 +66,50 @@ function Home() {
   }
 
   return (
-    <>
-      <div className="select-none h-full overflow-y-auto no-scrollbar">
-        {/* Featured Section*/}
-        <div className="px-5 my-3 ">
-          <h1 className="text-xl text-white font-semibold mb-3">Featured</h1>
-          <div className="grid grid-cols-2 gap-5">
-            {featured.map((song) => (
-              <div onClick={() => setCurrentSong(song)} key={song.id}>
-                <div className={`h-46 rounded-xl cursor-pointer overflow-hidden relative group transition-transform duration-200 hover:scale-[1.01] ${currentSong?.id === song.id ? "ring-2 ring-white/60" : ""}`}>
-                  <img
-                  className="w-full h-full object-cover"
-                    src={song.image} alt={song.title} />
-                   <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent">
-                    <p className="text-white text-sm font-semibold truncate">{song.title}</p>
-                         <p className="text-xs text-white/50 truncate">{song.artist}</p>
-                </div>
-                </div>
+    <div className="select-none h-full overflow-y-auto no-scrollbar">
+
+      {/* Featured */}
+      <div className="px-5 my-3">
+        <h1 className="text-xl text-white font-semibold mb-3">
+          Featured
+        </h1>
+
+        <div className="grid grid-cols-2 gap-5">
+          {featuredList.map((song) => (
+            <div
+              key={song.id}
+              onClick={() => setCurrentSong(song)}
+              className={`
+                h-46 rounded-xl cursor-pointer overflow-hidden relative group
+                transition-transform duration-200 hover:scale-[1.01]
+                ${currentSong?.id === song.id ? "ring-2 ring-white/60" : ""}
+              `}
+            >
+              <img
+                src={song.image}
+                alt={song.title}
+                className="w-full h-full object-cover"
+              />
+
+              <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent">
+                <p className="text-white text-sm font-semibold truncate">
+                  {song.title}
+                </p>
+                <p className="text-xs text-white/50 truncate">
+                  {song.artist}
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-        {/* Recommended component*/}
-        <div className="mt-10">
-        <Recommended/>
-    
+            </div>
+          ))}
         </div>
       </div>
-    </>
+
+      {/* Recommended */}
+      <div className="mt-10">
+        <Recommended data={recommended} />
+      </div>
+
+    </div>
   );
 }
 
